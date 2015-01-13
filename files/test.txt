@@ -1,0 +1,22 @@
+3
+--------------------
+Sector 1: x1y2sx3sy4
+outer-space.jpg
+4
+W: x100y200
+C: x3y4
+W: x500y600
+T: x300y550
+--------------------
+Sector 2: x5y6sx7sy8
+nasa-space.jpg
+3
+W: x150y500
+C: x10y10
+T: x500y500
+--------------------
+Sector 3: x1y2sx3sy4
+Orange-space.jpg
+2
+W: x100y100
+t: x500y500
