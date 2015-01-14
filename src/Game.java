@@ -51,11 +51,9 @@ public class Game extends JPanel implements ActionListener, KeyListener,
 	public JPanel background_1, background_2;
 	public Pixel[] pixels;
 	public Pixel[] pixels_2;
+
 	public Game(String path) throws IOException {
-		if (path.equals(""))
-			map = new World("test.txt");
-		else
-			map = new World(path + "-elements.text");
+		
 		score = 0;
 		click_count = 0;
 		right_clicked = false;
@@ -65,13 +63,17 @@ public class Game extends JPanel implements ActionListener, KeyListener,
 		my = 0;
 		sx = 0;
 		sy = 0;
-
+		if (path==null)
+			map = new World("default");
+		else
+			map = new World(path);
 		addBugs(bugs);
 		selectedBugs.add((Bug) bugs.get(bugs.size() - 1));
 		selectedBugs.get(0).selected = true;
 		System.out.println("level" + map.getLevel());
 
 		setBackground(50);
+		
 
 		setLayout(null);
 		combine = new PrettyBtn("COMBINE", 2);

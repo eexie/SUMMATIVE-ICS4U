@@ -47,7 +47,7 @@ public class World {
 
 	public void readFile(String path) throws IOException {
 		@SuppressWarnings("resource")
-		BufferedReader sc = new BufferedReader(new FileReader(path));
+		BufferedReader sc = new BufferedReader(new FileReader(path+"-elements.txt"));
 		sectors = new Sector[Integer.parseInt(sc.readLine())];
 		String data;
 		my = sectors.length;
@@ -108,7 +108,8 @@ public class World {
 				m.add(j);
 			sectors[i].setMap(m);
 		}
-		BufferedReader br = new BufferedReader(new FileReader(path+"-enemies.txt"));
+		BufferedReader br = new BufferedReader(new FileReader(path
+				+ "-enemies.txt"));
 		for (int i = 0; i < sectors.length; i++) {
 			int n = Integer.parseInt(br.readLine());
 			for (int j = 0; j < n; j++) {
