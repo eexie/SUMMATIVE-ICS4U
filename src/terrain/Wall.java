@@ -1,21 +1,23 @@
 package terrain;
 
-import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.Rectangle;
+import java.awt.Image;
+
+import javax.swing.ImageIcon;
 
 public class Wall extends Terrain {
-int size = 25;
+	private Image img = new ImageIcon("wall.png").getImage();
+
 	public Wall(int x, int y) {
 		super(x, y);
 		super.solid = true;
-		super.size=size;
+		super.size = 25;
 	}
 
 	@Override
 	public void draw(Graphics g, int x, int y) {
-		g.setColor(Color.red);
-		g.fillRect(this.x-size-x, this.y-size-y, size*2, size*2);
+		g.drawImage(img, this.x - size - x, this.y - size - y, size * 2 + 3,
+				size * 2 + 3, null);
 	}
 
 	@Override

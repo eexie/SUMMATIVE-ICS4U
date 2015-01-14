@@ -1,8 +1,8 @@
 import java.awt.*;
 import java.awt.event.*;
+import java.awt.geom.Ellipse2D;
 import java.io.IOException;
 import java.util.ArrayList;
-
 import javax.swing.*;
 
 import graphics.*;
@@ -15,11 +15,10 @@ public class Game extends JPanel implements ActionListener, KeyListener,
 	private static final long serialVersionUID = 1L;
 	private Timer timer;
 	public static ArrayList<Bug> bugs = new ArrayList<>();
-	public static ArrayList<Enemy> enemies = new ArrayList<>();
+	public static ArrayList<ArrayList<Enemy>> enemies = new ArrayList<>();
 	static ArrayList<Bug> selectedBugs = new ArrayList<>();
-	public static ArrayList<Bullet> bullets = new ArrayList<>();
-	public static ArrayList<Bullet> enemyBullets = new ArrayList<>();
-
+	// public static ArrayList<Bullet> bullets = new ArrayList<>();
+	// public static ArrayList<Bullet> enemyBullets = new ArrayList<>();
 	public static boolean left_clicked, right_clicked, shifted, space;
 	private int mx, my; // movement
 	private Rectangle dragBox; // Selection
@@ -52,6 +51,7 @@ public class Game extends JPanel implements ActionListener, KeyListener,
 		selectedBugs.add((Bug) bugs.get(bugs.size() - 1));
 		selectedBugs.get(0).selected = true;
 		map = new World("test.txt");
+		System.out.println("level" + map.getLevel());
 
 		setBackground(50);
 
@@ -77,7 +77,7 @@ public class Game extends JPanel implements ActionListener, KeyListener,
 		exit.addKeyListener(this);
 		addMouseListener(this);
 		addMouseMotionListener(this);
-		setBackground(new Color(225, 225, 225));
+		setBackground(new Color(255, 255, 255));
 		timer = new Timer(17, this);
 	}
 
@@ -98,25 +98,19 @@ public class Game extends JPanel implements ActionListener, KeyListener,
 		}
 		map.draw(g);
 
-		// side bar commands
-		Image sm = new ImageIcon("side-menu.png").getImage();
-		g.drawImage(sm, getWidth() - 220, 0, 220, getHeight(), null);
-		combine.setBounds(getWidth() - 190, getHeight() - 190, 170, 30);
-		pause.setBounds(getWidth() - 190, getHeight() - 130, 170, 30);
-		exit.setBounds(getWidth() - 190, getHeight() - 90, 170, 30);
 		Unit.setXY(map.getX(), map.getY());
 
 		// units
 		for (Bug i : bugs) {
 			i.draw(g);
 		}
-		for (Bullet i : bullets) {
-			i.draw(g);
-		}
-		for (Bullet i : enemyBullets) {
-			i.draw(g);
-		}
-		for (Enemy i : enemies)
+		// for (Bullet i : bullets) {
+		// i.draw(g);
+		// }
+		// for (Bullet i : enemyBullets) {
+		// i.draw(g);
+		// }
+		for (Enemy i : enemies.get(map.getLevel()))
 			i.draw(g);
 
 		// draw invisible buttons to deselect bugs
@@ -124,10 +118,17 @@ public class Game extends JPanel implements ActionListener, KeyListener,
 			selectButtons.get(i).setBounds(getWidth() - 189 + i % 2 * 88,
 					getHeight() - 419 + i / 2 * 116, 75, 70);
 		}
+
+		/* -----------side menu ------------- */
+		Image sm = new ImageIcon("side-menu.png").getImage();
+		g.drawImage(sm, getWidth() - 220, 0, 220, getHeight(), null);
+		combine.setBounds(getWidth() - 190, getHeight() - 190, 170, 30);
+		pause.setBounds(getWidth() - 190, getHeight() - 130, 170, 30);
+		exit.setBounds(getWidth() - 190, getHeight() - 90, 170, 30);
 		g.setColor(Color.white);
-		// paint minimap
+
+		// minimap
 		int l = map.getLevel();
-		// int l = 6;
 		if (l > 3) {
 			System.out.println(">");
 			l -= 4;
@@ -135,6 +136,7 @@ public class Game extends JPanel implements ActionListener, KeyListener,
 					10);
 		} else
 			g.fillOval(getWidth() - 195 + l * 55, getHeight() - 646, 10, 10);
+
 		// paint number of bugs, background, type,image for selected bugs
 		g.drawString(bugs.size() + "", getWidth() - 120, getHeight() - 565);
 		for (int i = 0; i < selectedBugs.size(); i++) {
@@ -175,7 +177,6 @@ public class Game extends JPanel implements ActionListener, KeyListener,
 
 	@Override
 	public void mouseMoved(MouseEvent e) {
-		// TODO Auto-generated method stub
 	}
 
 	@Override
@@ -209,7 +210,6 @@ public class Game extends JPanel implements ActionListener, KeyListener,
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
-		// TODO Auto-generated method stub
 
 		if (SwingUtilities.isLeftMouseButton(e)) {
 			left_clicked = false;
@@ -231,25 +231,18 @@ public class Game extends JPanel implements ActionListener, KeyListener,
 
 	@Override
 	public void mouseEntered(MouseEvent e) {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public void mouseExited(MouseEvent e) {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public void keyTyped(KeyEvent e) {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public void keyPressed(KeyEvent e) {
-		// TODO Auto-generated method stub
 		if (e.getKeyCode() == 38) {// up arrow
 			if (selectedBugs.size() < 6) {
 				Bug newSelected = (Bug) bugs.get(0);
@@ -292,7 +285,6 @@ public class Game extends JPanel implements ActionListener, KeyListener,
 
 	@Override
 	public void keyReleased(KeyEvent e) {
-		// TODO Auto-generated method stub
 		if (e.getKeyCode() == 16)// shift
 			shifted = false;
 		else if (e.getKeyCode() == 32) { // space
@@ -311,7 +303,6 @@ public class Game extends JPanel implements ActionListener, KeyListener,
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
 		if (e.getSource() == timer) {
 			if (bugs.size() == 0) {// losing condition
 				System.out.println("Game Over");
@@ -319,7 +310,6 @@ public class Game extends JPanel implements ActionListener, KeyListener,
 			}
 			if (right_clicked) {
 				int size = 0;
-				int bug_size = 0;
 				if (shifted) { // shift on, move all bugs
 					if (bugs.size() == 1) {
 						bugs.get(0).moveTo(mx, my);
@@ -340,13 +330,12 @@ public class Game extends JPanel implements ActionListener, KeyListener,
 						selectedBugs.get(0).moveTo(mx, my);
 					} else {
 						size = (int) Math.sqrt(selectedBugs.size());
-						bug_size = bugs.get(0).size;
 						for (int i = 0; i < selectedBugs.size(); i++) {
 							selectedBugs.get(i).moveTo(
-									mx + i % size * bug_size * 2 - size
-											* bug_size,
-									my + i * bug_size * 2 / size - size
-											* bug_size);
+									mx + i % size * Bug.size * 2 - size
+											* Bug.size,
+									my + i * Bug.size * 2 / size - size
+											* Bug.size);
 						}
 					}
 				}
@@ -365,11 +354,29 @@ public class Game extends JPanel implements ActionListener, KeyListener,
 				}
 			}
 			if (space) {
-				for (Unit i : enemies) {
-					if (i.getCollision()
-							.intersects(new Rectangle(sx, sy, 1, 1))) {
-						for (Unit j : selectedBugs) {
-							j.setAttack((Enemy) i);
+				// for (Enemy i : enemies.get(map.getLevel())) {
+				// if (i.getCollision().intersects(
+				// new Rectangle(sx - i.getSize(), sy - i.getSize(), i
+				// .getSize(), i.getSize()))) {
+				// for (Unit k : selectedBugs) {
+				// k.setAttack((Enemy) i);
+				// }
+				//
+				// }
+				// }
+
+				for (int j = 0; j < enemies.get(map.getLevel()).size(); j++) {
+					Enemy curE = enemies.get(map.getLevel()).get(j);
+					if (curE.getCollision().intersects(
+							new Rectangle(sx - curE.getSize(), sy
+									- curE.getSize(), curE.getSize(), curE
+									.getSize()))) {
+						for (Bug i : bugs) {
+							if (i.getRange().intersects(curE.getCollision())) {
+								System.out.println("attack");
+								i.setAttack(curE);
+							} else
+								i.setAttack(null);
 						}
 					}
 				}
@@ -383,27 +390,33 @@ public class Game extends JPanel implements ActionListener, KeyListener,
 				}
 			}
 			for (int i = 0; i < bugs.size(); i++) {
-				((Bug) bugs.get(i)).update(map);
+				bugs.get(i).update(map);
 			}
-			for (int i = 0; i < enemies.size(); i++){
-				((Enemy) enemies.get(i)).update();
-				if(((Enemy) enemies.get(i)).getHealth()<0)
-			}	
+			for (int i = 0; i < enemies.get(map.getLevel()).size(); i++) {
+				Enemy curr = enemies.get(map.getLevel()).get(i);
+				curr.update();
+				for (int j = 0; j < bugs.size(); j++) {
+					if (curr.getRange().intersects(bugs.get(j).getCollision())) {
+						curr.setAttack(bugs.get(j));
+					} else
+						curr.setAttack(null);
+				}
+			}
 			for (int i = 0; i < selectedBugs.size(); i++) {
 				if (!bugs.contains(selectedBugs.get(i)))
 					selectedBugs.remove(selectedBugs.get(i));
 			}
-			for (int i = 0; i < bullets.size(); i++) {
-				bullets.get(i).update();
-			}
-			for (int i = 0; i < enemyBullets.size(); i++) {
-				enemyBullets.get(i).update();
-			}
+			// for (int i = 0; i < bullets.size(); i++) {
+			// bullets.get(i).update();
+			// }
+			// for (int i = 0; i < enemyBullets.size(); i++) {
+			// enemyBullets.get(i).update();
+			// }
 			Point p = MouseInfo.getPointerInfo().getLocation();
-
-			for (Bullet i : bullets) {
-				i.moveTo((int) p.getX(), (int) p.getY() - 50);
-			}
+			//
+			// for (Bullet i : bullets) {
+			// i.moveTo((int) p.getX(), (int) p.getY() - 50);
+			// }
 		}
 
 		if (e.getSource() == combine) {/* combine */
@@ -479,7 +492,7 @@ public class Game extends JPanel implements ActionListener, KeyListener,
 		pixels = new Pixel[size];
 		pixels_2 = new Pixel[size];
 		for (int i = 0; i < pixels.length; i++) {
-			pixels[i] = new Pixel(new Color(255, 255, 255),
+			pixels[i] = new Pixel(new Color(225, 225, 225),
 					map.getSect().rect.width, map.getSect().rect.height);
 			pixels_2[i] = new Pixel(new Color(200, 200, 120),
 					map.getSect().rect.width, map.getSect().rect.height);
@@ -490,8 +503,8 @@ public class Game extends JPanel implements ActionListener, KeyListener,
 		bugs.clear();
 		selectedBugs.clear();
 		enemies.clear();
-		bullets.clear();
-		enemyBullets.clear();
+		// bullets.clear();
+		// enemyBullets.clear();
 		new Game();
 
 	}
