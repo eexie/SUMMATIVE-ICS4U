@@ -13,7 +13,7 @@ public class Enemy extends Unit {
 	public Enemy(int x, int y, int type, String mDirection, int distance,
 			int speed) {
 		super(x, y);
-		size = (int) (15 * Math.pow(1.6, type) / 1.6);
+		size = (int) (10 * Math.pow(1.4, type) / 1.4);
 		// size = 15 * type;
 		this.type = type;
 		setDamage();
@@ -215,26 +215,26 @@ public class Enemy extends Unit {
 			break;
 		case 2:
 			range = 100;
-			damage = 2;
+			damage = 1;
 			break;
 		case 3:
 			range = 150;
-			damage = 4;
+			damage = 2;
 			break;
 		case 4:
 			range = 200;
-			damage = 4;
+			damage = 2;
 		case 5:
 			range = 250;
-			damage = 10;
+			damage = 5;
 			break;
 		case 6:
 			range = 200;
-			damage = 30;
+			damage = 15;
 			break;
 		case 7:
 			range = 350;
-			damage = 10;
+			damage = 5;
 			break;
 		}
 

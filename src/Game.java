@@ -398,8 +398,10 @@ public class Game extends JPanel implements ActionListener, KeyListener,
 				for (int j = 0; j < bugs.size(); j++) {
 					if (curr.getRange().intersects(bugs.get(j).getCollision())) {
 						curr.setAttack(bugs.get(j));
-					} else
+					} else {
 						curr.setAttack(null);
+						continue;
+					}
 				}
 			}
 			for (int i = 0; i < selectedBugs.size(); i++) {

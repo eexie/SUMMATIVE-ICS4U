@@ -109,7 +109,7 @@ public class Unit {
 		if (support != null) {
 			combat = true;
 			support.health++;
-			if (support.health >= maxHealth) {
+			if (support.health <=0) {
 				support = null;
 			}
 		}

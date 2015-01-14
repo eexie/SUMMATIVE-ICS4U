@@ -102,6 +102,7 @@ public class GameFrame extends JFrame implements ActionListener {
 
 	public static void showGameOver() {
 		cards.show(c, "Game Over");
+		game.getTimer().stop();
 		try {
 			game.reset();
 		} catch (IOException e1) {
