@@ -1,11 +1,27 @@
-import java.awt.*;
-import java.awt.event.*;
-import java.awt.geom.Ellipse2D;
+import graphics.Pixel;
+
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Image;
+import java.awt.MouseInfo;
+import java.awt.Point;
+import java.awt.PointerInfo;
+import java.awt.Rectangle;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
 import java.io.IOException;
 import java.util.ArrayList;
-import javax.swing.*;
 
-import graphics.*;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
+import javax.swing.Timer;
 
 public class Game extends JPanel implements ActionListener, KeyListener,
 		MouseListener, MouseMotionListener {
@@ -35,8 +51,11 @@ public class Game extends JPanel implements ActionListener, KeyListener,
 	public JPanel background_1, background_2;
 	public Pixel[] pixels;
 	public Pixel[] pixels_2;
-
-	public Game() throws IOException {
+	public Game(String path) throws IOException {
+		if (path.equals(""))
+			map = new World("test.txt");
+		else
+			map = new World(path + "-elements.text");
 		score = 0;
 		click_count = 0;
 		right_clicked = false;
@@ -50,7 +69,6 @@ public class Game extends JPanel implements ActionListener, KeyListener,
 		addBugs(bugs);
 		selectedBugs.add((Bug) bugs.get(bugs.size() - 1));
 		selectedBugs.get(0).selected = true;
-		map = new World("test.txt");
 		System.out.println("level" + map.getLevel());
 
 		setBackground(50);
@@ -70,11 +88,9 @@ public class Game extends JPanel implements ActionListener, KeyListener,
 			add(newJB);
 			newJB.addActionListener(this);
 		}
-		addKeyListener(this);
 		combine.addActionListener(this);
 		combine.addKeyListener(this);
-		pause.addKeyListener(this);
-		exit.addKeyListener(this);
+		addKeyListener(this);
 		addMouseListener(this);
 		addMouseMotionListener(this);
 		setBackground(new Color(255, 255, 255));
@@ -507,7 +523,7 @@ public class Game extends JPanel implements ActionListener, KeyListener,
 		enemies.clear();
 		// bullets.clear();
 		// enemyBullets.clear();
-		new Game();
+		new Game(map.getPath());
 
 	}
 }

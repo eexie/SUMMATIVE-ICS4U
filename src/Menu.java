@@ -10,7 +10,7 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 
 public class Menu extends JPanel {
-	public JButton play, instructions, load, about, exit;
+	public JButton play, instructions, editor, about, exit;
 	private JPanel buttonsHolder, grid;
 	private GridBagConstraints gbc;
 
@@ -23,7 +23,7 @@ public class Menu extends JPanel {
 		play = new PrettyBtn(new ImageIcon("play-button.png"), new ImageIcon(
 				"play-button-hover.png"));
 		play.setOpaque(false);
-		load = new PrettyBtn("LOAD GAME",1);
+		editor = new PrettyBtn("MAP EDITOR",1);
 		instructions = new PrettyBtn("INSTRUCTIONS",1);
 		about = new PrettyBtn("ABOUT",1);
 		exit = new PrettyBtn("EXIT",1);
@@ -35,7 +35,7 @@ public class Menu extends JPanel {
 		grid.setOpaque(false);
 		grid.add(play, gbc);
 
-		buttonsHolder.add(load);
+		buttonsHolder.add(editor);
 		buttonsHolder.add(instructions);
 		buttonsHolder.add(about);
 		buttonsHolder.add(exit);

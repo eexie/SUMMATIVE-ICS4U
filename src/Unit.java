@@ -109,7 +109,7 @@ public class Unit {
 		if (support != null) {
 			combat = true;
 			support.health++;
-			if (support.health <=0) {
+			if (support.health <= 0) {
 				support = null;
 			}
 		}
@@ -161,6 +161,18 @@ public class Unit {
 
 	public int getTy() {
 		return ty;
+	}
+
+	public int getType() {
+		return type;
+	}
+
+	public void setType(int type) {
+		this.type = type;
+	}
+
+	public void setSize(int size) {
+		this.size = size;
 	}
 
 	public int getSize() {

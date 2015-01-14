@@ -18,6 +18,7 @@ public class World {
 	static Sector[] sectors;
 	final int[] A = { 0, -1, 1, 0 };
 	final int[] B = { -1, 0, 0, 1 };
+	private String path;
 
 	public World() {
 		level = 0;
@@ -32,6 +33,7 @@ public class World {
 	}
 
 	public World(String path) throws IOException {
+		this.path = path;
 		level = 0;
 		tx = 0;
 		ty = 0;
@@ -106,7 +108,7 @@ public class World {
 				m.add(j);
 			sectors[i].setMap(m);
 		}
-		BufferedReader br = new BufferedReader(new FileReader("enemies.txt"));
+		BufferedReader br = new BufferedReader(new FileReader(path+"-enemies.txt"));
 		for (int i = 0; i < sectors.length; i++) {
 			int n = Integer.parseInt(br.readLine());
 			for (int j = 0; j < n; j++) {
@@ -169,6 +171,11 @@ public class World {
 
 	public int getLevel() {
 		return level;
+	}
+
+	public String getPath() {
+		// TODO Auto-generated method stub
+		return path;
 	}
 
 	// public static void main(String args[]){

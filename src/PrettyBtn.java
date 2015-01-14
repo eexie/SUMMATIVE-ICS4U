@@ -7,32 +7,34 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 
 public class PrettyBtn extends JButton implements MouseListener {
-Color c1,c2;
-	public PrettyBtn(String title,int type) {
+	Color c1, c2;
+
+	public PrettyBtn(String title, int type) {
 		// TODO Auto-generated constructor stub
 		this();
-		if(type==1){
-		c1 = Color.BLACK;
-		c2 = Color.WHITE;
-		}
-		else if(type==2){
+		if (type == 1) {
+			c1 = Color.BLACK;
+			c2 = Color.WHITE;
+		} else if (type == 2) {
 			c1 = Color.WHITE;
 			c2 = Color.BLACK;
 		}
 		setText(title);
-		setFont(DefFont.derived(12,0.4));
+		setFont(DefFont.derived(12, 0.3));
 		setSize(120, 30);
 		setBackground(c1);
 		setForeground(c2);
 		addMouseListener(this);
 	}
-	public PrettyBtn(){
+
+	public PrettyBtn() {
 		setBorderPainted(false);
 		this.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		setOpaque(true);
-		
+
 	}
-	public PrettyBtn(ImageIcon icon, ImageIcon hover){
+
+	public PrettyBtn(ImageIcon icon, ImageIcon hover) {
 		this();
 		setIcon(icon);
 		setBackground(c2);

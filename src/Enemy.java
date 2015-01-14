@@ -13,7 +13,7 @@ public class Enemy extends Unit {
 	public Enemy(int x, int y, int type, String mDirection, int distance,
 			int speed) {
 		super(x, y);
-		size = (int) (10 * Math.pow(1.4, type) / 1.4);
+		size = (int) (15 * Math.pow(1.4, type) / 1.4);
 		// size = 15 * type;
 		this.type = type;
 		setDamage();
